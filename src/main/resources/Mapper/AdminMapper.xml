@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bishe.dao.AdminMapper">
+    
+    <resultMap type="Admin" id="AdminResult">
+        <result property="id"    column="id"    />
+        <result property="username"    column="username"    />
+        <result property="password"    column="password"    />
+        <result property="phone"    column="phone"    />
+        <result property="roles"    column="roles"    />
+        <result property="avatar"    column="avatar"    />
+        <result property="createDate"    column="create_date"    />
+        <result property="updateDate"    column="update_date"    />
+    </resultMap>
+
+    <sql id="selectAdminVo">
+        select id, username, password, phone, roles, avatar, create_date, update_date from admin
+    </sql>
+
+    <select id="selectAdminList" parameterType="Admin" resultMap="AdminResult">
+        select id, username, password, phone, roles, avatar, create_date, update_date from admin
+        <where>  
+            <if test="username != null  and username != ''"> and username like concat('%', #{username}, '%')</if>
+            <if test="password != null  and password != ''"> and password = #{password}</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+            <if test="roles != null  and roles != ''"> and roles = #{roles}</if>
+        </where>
+    </select>
+    
+    <select id="selectAdminById" parameterType="Long" resultMap="AdminResult">
+        <include refid="selectAdminVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertAdmin" parameterType="Admin" useGeneratedKeys="true" keyProperty="id">
+        insert into admin
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="username != null">username,</if>
+            <if test="password != null">password,</if>
+            <if test="phone != null">phone,</if>
+            <if test="roles != null">roles,</if>
+            <if test="avatar != null">avatar,</if>
+            <if test="createDate != null">create_date,</if>
+            <if test="updateDate != null">update_date,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="username != null">#{username},</if>
+            <if test="password != null">#{password},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="roles != null">#{roles},</if>
+            <if test="avatar != null">#{avatar},</if>
+            <if test="createDate != null">#{createDate},</if>
+            <if test="updateDate != null">#{updateDate},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAdmin" parameterType="Admin">
+        update admin
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="username != null">username = #{username},</if>
+            <if test="password != null">password = #{password},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="roles != null">roles = #{roles},</if>
+            <if test="avatar != null">avatar = #{avatar},</if>
+            <if test="createDate != null">create_date = #{createDate},</if>
+            <if test="updateDate != null">update_date = #{updateDate},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAdminById" parameterType="Long">
+        delete from admin where id = #{id}
+    </delete>
+
+    <delete id="deleteAdminByIds" parameterType="String">
+        delete from admin where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

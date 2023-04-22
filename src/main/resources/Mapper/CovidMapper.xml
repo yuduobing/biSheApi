@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bishe.dao.CovidMapper">
+    
+    <resultMap type="Covid" id="CovidResult">
+        <result property="id"    column="id"    />
+        <result property="provinceLabel"    column="provinceLabel"    />
+        <result property="confirmedCount"    column="confirmedCount"    />
+        <result property="deadCount"    column="deadCount"    />
+        <result property="currentConfirmedCount"    column="currentConfirmedCount"    />
+    </resultMap>
+
+    <sql id="selectCovidVo">
+        select id, provinceLabel, confirmedCount, deadCount, currentConfirmedCount from covid
+    </sql>
+
+    <select id="selectCovidList" parameterType="Covid" resultMap="CovidResult">
+        <include refid="selectCovidVo"/>
+        <where>  
+            <if test="provinceLabel != null  and provinceLabel != ''"> and provinceLabel = #{provinceLabel}</if>
+            <if test="confirmedCount != null  and confirmedCount != ''"> and confirmedCount = #{confirmedCount}</if>
+            <if test="deadCount != null  and deadCount != ''"> and deadCount = #{deadCount}</if>
+            <if test="currentConfirmedCount != null  and currentConfirmedCount != ''"> and currentConfirmedCount = #{currentConfirmedCount}</if>
+        </where>
+    </select>
+    
+    <select id="selectCovidById" parameterType="Long" resultMap="CovidResult">
+        select id, provinceLabel, confirmedCount, deadCount, currentConfirmedCount from covid
+        where id = #{id}
+    </select>
+        
+    <insert id="insertCovid" parameterType="Covid">
+        insert into covid
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            <if test="provinceLabel != null">provinceLabel,</if>
+            <if test="confirmedCount != null">confirmedCount,</if>
+            <if test="deadCount != null">deadCount,</if>
+            <if test="currentConfirmedCount != null">currentConfirmedCount,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+
+            <if test="provinceLabel != null">#{provinceLabel},</if>
+            <if test="confirmedCount != null">#{confirmedCount},</if>
+            <if test="deadCount != null">#{deadCount},</if>
+            <if test="currentConfirmedCount != null">#{currentConfirmedCount},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCovid" parameterType="Covid">
+        update covid
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="provinceLabel != null">provinceLabel = #{provinceLabel},</if>
+            <if test="confirmedCount != null">confirmedCount = #{confirmedCount},</if>
+            <if test="deadCount != null">deadCount = #{deadCount},</if>
+            <if test="currentConfirmedCount != null">currentConfirmedCount = #{currentConfirmedCount},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCovidById" parameterType="Long">
+        delete from covid where id = #{id}
+    </delete>
+
+    <delete id="deleteCovidByIds" parameterType="String">
+        delete from covid where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
