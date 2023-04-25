@@ -2,8 +2,8 @@ package com.bishe.controller;
 
 import java.util.List;
 
-import com.bishe.common.AjaxResult;
 import com.bishe.common.BaseController;
+import com.bishe.common.core.domain.AjaxResult;
 import com.bishe.entity.Admin;
 import com.bishe.entity.R;
 import com.bishe.service.IRoleService;

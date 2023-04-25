@@ -6,8 +6,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
-import com.bishe.common.AjaxResult;
 import com.bishe.common.BaseController;
+import com.bishe.common.core.domain.AjaxResult;
 import com.bishe.entity.Covid;
 
 import org.springframework.beans.factory.annotation.Autowired;
